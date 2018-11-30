@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.locals import *
 import os
 from random import randint
+import math
 
 class Player:
 	def __init__(self, x=0, y=0, level=1, enemy=False, img=None, effect=None):
@@ -42,9 +43,12 @@ class Player:
 			self.vel_x = 0
 
 	def displayHP(self, surface):
-		w = self.hp / (50 * self.level) * self.width
+		percentage = self.hp / (50 * self.level)
+		if percentage <= 0:
+			percentage = 0
+		w = percentage * self.width
 		h = 2
-		pg.draw.rect(surface, (0, 255, 0), pg.Rect(self.x, self.y - h * 2, w, h))
+		pg.draw.rect(surface, (math.floor(255*(1-percentage)), math.floor(255*percentage), 0), pg.Rect(self.x, self.y - h * 2, w, h))
 
 
 	def shoot(self, vel, scale, img, audio):
